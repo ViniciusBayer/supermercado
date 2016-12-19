@@ -1,0 +1,160 @@
+(*
+# PROGRAMA FEITO EM PASCAL!
+#
+#================================================================
+#
+# SUPERMERCADO - GERENCIAR UM CAIXA DE SUPERMERCADO.
+#
+#		     	CAIXA DE SUPERMERCADO
+# PROJETO FEITO PARA A AULA DE PROGRAMAÇÃO EM PASCAL
+# PARA AUXILIAR UM SUPERMERCADO NAS SUAS VENDAS DE MERCADORIA.
+# 
+# GITHUB: https://github.com/viniciusbayer/supermercado/mercado
+#
+#
+# Autor: Vinicius Bayer <viniciusbayer@hotmail.com>. 
+# 
+#
+# Historico: 
+# 	v1.0 2016-12-17, Vinicius Bayer
+# 		- Versão de teste.
+# 
+## Essa versão deve apresentar alguns bugs. 
+# 
+#  
+# Licença: GPL 
+#================================================================
+*)
+
+Program super;
+uses crt;
+type
+
+	mercadoria = record
+				codproduto: integer;
+				precoproduto: real;
+				nomeproduto: string;
+			end;
+var
+	venda: array[1..100] of mercadoria;
+	i,y:integer;
+	caixa, soma, din, troco:real;
+	menu, tela:string;
+	pass, user, resp:string;
+	cont, cont2,b: integer;
+	cod: array[1..100] of integer;
+	quant: array[1..100] of integer;
+
+// Usuario = admin
+// Senha = admin	
+
+Begin
+	soma:= 0;
+	cont:= 0;
+	cont2:= 0;
+	b:= 0;
+	i := 0;
+	tela := 'w';
+	menu := 'z';
+	
+	while tela <> 'q' do	
+	begin // Tela inicial do sistema
+
+		gotoxy(10,1);
+		writeln('SISTEMA BAYER!');
+		writeln('');
+		writeln('');
+		gotoxy(13,3);
+		writeln('BEM VINDO...');
+		delay(10000);
+		clrscr;
+		write('User: '); // Usuario.
+		readln(user);
+		write('Pass: '); // Senha.
+		readln(pass);
+		delay(1000);
+		clrscr;
+		if ( user = 'admin') and (pass = 'admin') then // Login do usuario.
+		begin // Valor para começar no caixa.
+			write('Informe um valor para o caixa: ');
+			readln(caixa);
+			delay(1000);
+			clrscr;
+		
+			while menu <> 's' do
+			begin // Menu. 
+
+				writeln('Escolha uma opção.');
+				writeln('');
+				writeln('P - Cadastrar Produto.');
+				writeln('V - Fazer Venda.');
+				writeln('X - Caixa.');
+				writeln('S - Sair');
+				menu := readkey;
+				clrscr;
+				if menu = 'p' then
+				begin // Cadastro de produtos 
+					repeat
+						i := i +1;
+						cont:= cont + 1;
+						write('Informe o CODIGO do Produto: ');
+						readln(venda[i].codproduto);
+						write('Informe o NOME do Produto: ');
+						readln(venda[i].nomeproduto);
+						write('Informe o PRECO do Produto: ');
+						readln(venda[i].precoproduto);
+						delay(1000);							
+						clrscr;
+						write('Deseja Cadastrar outro produto? S/N');
+						resp := readkey;
+						writeln;
+						delay(1000);
+						clrscr;
+					until resp <> 's';
+				end;
+				if menu = 'v' then
+				begin
+					
+						for y:= 1 to i do
+							begin  // Apenas lista.
+								writeln(venda[y].codproduto , ' | ' , venda[y].nomeproduto , ' | ' , venda[y].precoproduto:0:2);
+							end;
+						writeln('-------------------------------------------------------');
+					repeat
+							
+							cont2:= cont2 + 1; 
+							writeln('Informe o codigo do prduto desejado');
+							readln(cod[cont2]);
+							writeln('Informe a quantidade desejada');
+							readln(quant[cont2]);	
+							writeln('Deseja continuar? S/N');
+							readln(resp);
+							
+					until resp <> 's';
+					for y:= 1 to cont do
+						begin // Venda de produtos do mercado.
+							for b:= 1 to cont2 do
+							begin
+								if cod[b] = venda[y].codproduto then
+									soma:= soma + (venda[y].precoproduto * quant[b]);
+							end;
+						end;
+						writeln('Sua compra deu: ' , soma :0:2); 
+						writeln('');						
+						write('Informe o valor em dinheiro: ');
+						readln(din);
+						troco := soma - din;
+						writeln('Seu troco é: ' , troco);
+						
+				end;	
+				if menu = 'x' then
+				begin //Caixa do supermercado.
+					caixa := caixa + soma;
+					write('O valor do caixa é: ' , caixa:0:2);					
+					delay(1000);
+					clrscr;
+				end;
+			end;	
+		end;
+	end;	
+End.
